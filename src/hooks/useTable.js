@@ -183,7 +183,7 @@ export const useTable = (props, ...plugins) => {
   getInstance().allColumns = allColumns
 
   // Access the row model using initial columns
-  const [rows, flatRows, rowsById] = React.useMemo(() => {
+  const initializeRows = () => {
     let rows = []
     let flatRows = []
     const rowsById = {}
@@ -206,7 +206,21 @@ export const useTable = (props, ...plugins) => {
     }
 
     return [rows, flatRows, rowsById]
-  }, [allColumns, data, getRowId, getSubRows, getHooks, getInstance])
+  }
+  /**
+   * filters hook mutate rows.subrows, we cannot memoize rows in initialization.
+   */
+  /*
+  const [rows, flatRows, rowsById] = React.useMemo(initializeRows, [
+    allColumns,
+    data,
+    getRowId,
+    getSubRows,
+    getHooks,
+    getInstance,
+  ])
+  */
+  const [rows, flatRows, rowsById] = initializeRows()
 
   Object.assign(getInstance(), {
     rows,
